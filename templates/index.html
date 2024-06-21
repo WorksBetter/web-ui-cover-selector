@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gutenberg Book Covers</title>
+    <style>
+        .book {
+            margin-bottom: 20px;
+        }
+        .covers {
+            display: flex;
+            gap: 10px;
+        }
+        .covers img {
+            max-width: 100px;
+            cursor: pointer;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .pagination a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #ddd;
+            border-radius: 5px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gutenberg Book Covers</h1>
+    <div>
+        {% for book in books %}
+        <div class="book">
+            <h2>{{ book['Title'] }}</h2>
+            <div class="covers">
+                {% for cover_url in book['Cover URLs'] %}
+                <form action="/select_cover" method="post">
+                    <input type="hidden" name="book_id" value="{{ book['Book ID'] }}">
+                    <input type="hidden" name="cover_url" value="{{ cover_url }}">
+                    <img src="{{ cover_url }}" alt="Cover Image" onclick="this.parentElement.submit()">
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('index', page=page-1) }}">Previous</a>
+        {% endif %}
+        <a href="{{ url_for('index', page=page+1) }}">Next</a>
+    </div>
+</body>
+</html>
